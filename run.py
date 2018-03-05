@@ -2,13 +2,14 @@ from pytz import utc
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.jobstores.memory import MemoryJobStore
 from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from sched import scheduler
 import time
 
 
 jobstores = {
-    'default': SQLAlchemyJobStore(url='sqlite:///jobs.sqlite')
+    'default': MemoryJobStore()
 }
 executors = {
     'default': ThreadPoolExecutor(20),
@@ -16,7 +17,7 @@ executors = {
 }
 job_defaults = {
     'coalesce': False,
-    'max_instances': 3
+    'max_instances': 1
 }
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc)
 
@@ -38,4 +39,4 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
-app.run(debug=True, host='0.0.0.0')
+app.run(debug=False, host='0.0.0.0')

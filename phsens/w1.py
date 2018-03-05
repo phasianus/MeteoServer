@@ -1,4 +1,6 @@
-class KSensor(object):
+from phsens.sensors import Sensor
+
+class KSensor(Sensor):
     
     def __init__ (self,sensor_id):
         self.id=sensor_id
@@ -11,7 +13,8 @@ class KSensor(object):
 
     def o(self, data=()):
         pass
-
+    
+        
 
 class Ds2438(KSensor):
     
@@ -23,7 +26,9 @@ class Ds2438(KSensor):
 
     def vdd(self):
         return float(self.r("vdd")) / 100
-
+    
+    def measure(self):
+        return self.temperature() 
 
 
 class Hih50x(Ds2438):
@@ -37,6 +42,8 @@ class Hih50x(Ds2438):
     
         #	return (self.vad() / self.vdd() - 0.16) / 0.0062 / (1.0546 - 0.00216 * self.temperature())
 
+    def measure(self):
+        return self.humidity()
 
 class Ds18b20(KSensor):
 
@@ -46,3 +53,5 @@ class Ds18b20(KSensor):
             return None
         return float(f.readline().split("t=")[1])/1000
     
+    def measure(self):
+        return self.temperature()c
